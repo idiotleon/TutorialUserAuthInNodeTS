@@ -1,83 +1,73 @@
-import * as argon2 from 'argon2';
-import { randomBytes } from 'crypto';
-import * as jwt from 'jsonwebtoken';
-import * as dotenv from 'dotenv';
-import UserModel from '../models/user';
-
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const argon2 = require("argon2");
+const crypto_1 = require("crypto");
+const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv");
+const user_1 = require("../models/user");
 const envConfig = dotenv.config();
-
-export default class AuthServie {
+class AuthServie {
     constructor() { }
-
-    public async Login(email: string, password: string): Promise<any> {
-        const userRecord = await UserModel.findOne({ email });
+    async Login(email, password) {
+        const userRecord = await user_1.default.findOne({ email });
         if (!userRecord) {
             throw new Error('User not found');
-        } else {
+        }
+        else {
             const correctPassword = await argon2.verify(userRecord.password, password);
             if (!correctPassword) {
                 throw new Error('Incorrect password');
             }
         }
-
         return {
             user: {
                 email: userRecord.email,
                 name: userRecord.name,
             },
             token: this.generateJWT(userRecord),
-        }
+        };
     }
-
-    public async LoginAs(email: string): Promise<any> {
-        const userRecord = await UserModel.findOne({ email });
+    async LoginAs(email) {
+        const userRecord = await user_1.default.findOne({ email });
         console.log('Finding user record...');
         if (!userRecord) {
             throw new Error('User not found');
         }
-
         return {
             user: {
                 email: userRecord.email,
                 name: userRecord.name,
             },
             token: this.generateJWT(userRecord),
-        }
+        };
     }
-
-    public async SignUp(email: string, password: string, name: string): Promise<any> {
-        const salt = randomBytes(32);
-
+    async SignUp(email, password, name) {
+        const salt = crypto_1.randomBytes(32);
         const passwordHashed = await argon2.hash(password, { salt });
-
-        const userRecord = await UserModel.create({
+        const userRecord = await user_1.default.create({
             password: passwordHashed,
             email,
             salt: salt.toString('hex'),
             name,
         });
-
         const token = this.generateJWT(userRecord);
-
         return {
             user: {
                 email: userRecord.email,
                 name: userRecord.name,
             },
             token,
-        }
+        };
     }
-
-    private generateJWT(user) {
+    generateJWT(user) {
         return jwt.sign({
             data: {
                 _id: user._id,
                 name: user.name,
                 email: user.email
             }
-        },
-            process.env.JWT_SECRET,
-            { expiresIn: '6h' }
-        )
+        }, envConfig.JWT_SECRET, { expiresIn: '6h' });
     }
 }
+exports.default = AuthServie;
+//# sourceMappingURL=auth.js.map

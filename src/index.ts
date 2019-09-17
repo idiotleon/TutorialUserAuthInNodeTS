@@ -8,12 +8,11 @@ const app = express();
 app.use(bodyParser.json());
 app.use('/api', routes);
 
-const PORT = 3777;
-const DBName = "idiotleon-user-auth-nodets";
-app.listen(PORT, async () => {
+app.listen(process.env.SERVER_PORT, async () => {
     console.log('Server ready!');
-    const mongoConnection = await mongoose.connect(`mongodb://localhost/${DBName}`);
+    mongoose.set('useCreateIndex', true)
+    await mongoose.connect(`mongodb://localhost/${process.env.MONGO_DB_NAME}`, { useNewUrlParser: true, useUnifiedTopology: true });
     console.log('Database ready!');
 
-    console.log(`Listening on port ${PORT}`);
+    console.log(`Listening on port ${process.env.SERVER_PORT}`);
 });
