@@ -1,7 +1,8 @@
 import * as jwt from 'express-jwt';
-import * as dotenv from 'dotenv';
+import { config } from 'dotenv';
+import { resolve } from 'path';
 
-const config = dotenv.config();
+config({ path: resolve(__dirname, "../../.env") })
 
 const getTokenFromHeader = (req) => {
     if (req.headers.authorization && req.authorization.split(' ')[0] === 'Bearer') {

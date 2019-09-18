@@ -1,8 +1,8 @@
 import * as mongoose from 'mongoose';
 
 interface ItemInterface {
-    name: String;
-    owner: String;
+    name: string;
+    owner: string;
 }
 
 const ItemSchema = new mongoose.Schema({

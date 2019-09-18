@@ -3,11 +3,11 @@ import ItemModel from '../models/items';
 export default class ItemsService {
     constructor() { }
 
-    public async GetMyItems(user): Promise<any> {
+    public async GetMyItems(user): Promise<any[]> {
         return ItemModel.find({ owner: user._id }).populate({ path: 'owner', select: '-password -salt' }).exec();
     }
 
-    public async GetItem(itemId: string, user): Promise<any[]> {
+    public async GetItem(itemId, user): Promise<any[]> {
         return ItemModel.findOne({ _id: itemId, owner: user._id }).populate({ path: 'owner', select: '-password -salt' });
     }
 

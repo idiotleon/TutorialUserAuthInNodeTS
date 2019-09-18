@@ -1,10 +1,11 @@
 import * as argon2 from 'argon2';
 import { randomBytes } from 'crypto';
 import * as jwt from 'jsonwebtoken';
-import * as dotenv from 'dotenv';
+import { config } from 'dotenv';
 import UserModel from '../models/user';
+import { resolve } from 'path';
 
-const envConfig = dotenv.config();
+config({ path: resolve(__dirname, "../../.env") })
 
 export default class AuthServie {
     constructor() { }

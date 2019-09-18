@@ -19,7 +19,7 @@
         "sourceMap": true,
         "outDir": "./build",
         "allowJs": true,
-        "noEmit": false,
+        "noEmit": false
     },
     "include": [
         "./src/**/*"
