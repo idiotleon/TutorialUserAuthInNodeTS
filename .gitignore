@@ -9,6 +9,11 @@ lerna-debug.log*
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
+# Build Files
+build/
+out/
+
+
 # Runtime data
 pids
 *.pid
@@ -90,3 +95,6 @@ public
 
 # DynamoDB Local files
 .dynamodb/
+
+# VSCode
+.vscode/
